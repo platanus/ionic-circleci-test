@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'open3'
+
+file = File.read('ionic.config.json')
+data_hash = JSON.parse(file)
+app_name = data_hash['name']
+cmd = "ionic package build android --profile #{app_name}_production --release"
+
+Open3.popen2e(cmd) do |_stdin, stdout_err, _wait_thr|
+  while line = stdout_err.gets
+    puts line
+  end
+end
