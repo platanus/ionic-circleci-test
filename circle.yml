@@ -7,11 +7,21 @@ dependencies:
   override:
     - yarn
     - yarn add g ionic
-    - yarn run build
-    - ionic login
-    - ionic upload
   cache_directories:
     - ~/.cache/yarn
+deployment:
+  master:
+    branch: master
+    owner: platanus
+    commands:
+      - yarn run build
+      - ionic login
+      - ionic upload
+  release:
+    tag: /v[0-9]+(\.[0-9]+)*/
+    owner: platanus
+    commands:
+      - echo "should run ionic package"
 test:
   override:
     - echo "no tests :("
