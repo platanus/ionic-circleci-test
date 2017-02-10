@@ -2,15 +2,33 @@
 
 require 'json'
 require 'open3'
+require 'fileutils'
 
 file = File.read('ionic.config.json')
 data_hash = JSON.parse(file)
-app_name = data_hash['name'].delete('-').downcase
-cmd = "ionic package build android --profile #{app_name}_production --release"
+app_name = data_hash['name']
+clean_name = app_name.delete('-').downcase
+build_id = nil
+build_info = nil
+
+cmd = "ionic package build android --profile #{clean_name}_production --release"
 
 Open3.popen2e(cmd) do |_stdin, stdout_err, wait_thr|
   while line = stdout_err.gets
     puts line
+    result = line.match(/Build ID: (\d+)/)
+    build_id = result[1] unless result.nil?
   end
   raise unless wait_thr.value.exitstatus === 0
 end
+
+while (build_info =~ /SUCCESS/).nil?
+  build_info = `ionic package info #{build_id}`
+  puts 'waiting for download...'
+  sleep(5)
+end
+
+download_result = `ionic package download #{build_id}`
+file_path = download_result.match(/Wrote: (.+)/)[1]
+file_name = File.basename file_path
+FileUtils.mv(file_path, "#{ENV['CIRCLE_ARTIFACTS']}/#{file_name}.apk")
