@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'json'
+file = File.read('ionic.config.json')
+data_hash = JSON.parse(file)
+puts data_hash['name']
