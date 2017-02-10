@@ -9,12 +9,14 @@ dependencies:
     - yarn add g ionic
   cache_directories:
     - ~/.cache/yarn
+compile:
+  override:
+    - yarn run build
 deployment:
   master:
     branch: master
     owner: platanus
     commands:
-      - yarn run build
       - ionic login
       - ionic upload
   release:
