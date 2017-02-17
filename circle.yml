@@ -13,7 +13,6 @@ dependencies:
     - ~/.cache/yarn
 compile:
   override:
-    - yarn run build
     - ./cibuild compile
 deployment:
   master:
