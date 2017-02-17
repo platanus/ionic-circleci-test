@@ -45,7 +45,7 @@ module CiIonicBuilder
     file = File.read('ionic.config.json')
     data_hash = JSON.parse(file)
     app_name = data_hash['name']
-    app_name.delete('-').downcase
+    app_name.downcase.gsub(/[^a-zA-Z0-9_]/, "")
   end
 
   def build_package
