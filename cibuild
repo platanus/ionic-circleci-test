@@ -21,7 +21,8 @@ module CiIonicBuilder
   def compile
     run_command("yarn run build")
     if !!ENV['CIRCLE_TAG']
-      build_production
+      build_production "android"
+      build_production "ios" # Will fail until certificate generation is ready
     end
   end
 
@@ -29,8 +30,8 @@ module CiIonicBuilder
     puts "upload to app store goes here"
   end
 
-  def build_production
-    build_id = build_package
+  def build_production(platform)
+    build_id = build_package(platform)
     save_package(build_id)
   end
 
@@ -49,10 +50,10 @@ module CiIonicBuilder
     app_name.downcase.gsub(/[^a-zA-Z0-9_]/, "")
   end
 
-  def build_package
+  def build_package(platform)
     clean_name = get_app_clean_name
     build_id = nil
-    cmd = "ionic package build android --profile #{clean_name}_production --release"
+    cmd = "ionic package build #{platform} --profile #{clean_name}_production --release"
 
     run_command(cmd) do |line|
       result = line.match(/Build ID: (\d+)/)
