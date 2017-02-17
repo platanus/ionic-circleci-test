@@ -14,19 +14,18 @@ dependencies:
 compile:
   override:
     - yarn run build
+    - ./cibuild compile
 deployment:
   master:
     branch: master
     owner: platanus
     commands:
-      - ionic login
-      - ionic upload
+      - ./cibuild staging
   release:
     tag: /v[0-9]+(\.[0-9]+)*/
     owner: platanus
     commands:
-      - ionic login
-      - ./cibuild
+      - ./cibuild production
 test:
   override:
     - echo "no tests :("
