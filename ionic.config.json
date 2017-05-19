@@ -1,0 +1,11 @@
+{
+  "name": "test",
+  "app_id": "",
+  "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://pl-test-staging.herokuapp.com/api/v1"
+    }
+  ]
+}
